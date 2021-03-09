@@ -30,16 +30,22 @@ public class HashTable {
      * @param value El propi element que es vol afegir.
      */
     public void put(String key, String value) {
+        //guardamos el hash
         int hash = getHash(key);
+        // creamos un nuevo hash en el q tudo es null
         final HashEntry hashEntry = new HashEntry(key, value);
 
+        //si este hash esta vacio, lo iniciamos
         if(entries[hash] == null) {
             entries[hash] = hashEntry;
         }
         else {
+            //creamos un hashentry temporal
             HashEntry temp = entries[hash];
-            while(temp.next != null)
+
+            while(temp.next != null){
                 temp = temp.next;
+            }
 
             temp.next = hashEntry;
             hashEntry.prev = temp;
@@ -59,8 +65,9 @@ public class HashTable {
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
 
-            while( !temp.key.equals(key))
+            while( !temp.key.equals(key)){
                 temp = temp.next;
+            }
 
             return temp.value;
         }
@@ -73,18 +80,52 @@ public class HashTable {
      * @param key La clau de l'element a trobar.
      */
     public void drop(String key) {
+        //tenemos el hash
         int hash = getHash(key);
+        //si en ese hash hay algo
         if(entries[hash] != null) {
 
+            //creamos el temporal
             HashEntry temp = entries[hash];
-            while( !temp.key.equals(key))
+
+            while (!temp.key.equals(key))
                 temp = temp.next;
 
-            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
-            else{
-                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
-                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+//            if(temp.prev == null ){
+//                 if(temp.next != null) {
+//                    temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
+//                    temp.prev.next = temp.next;   //esborrem temp, per tant actualitzem el següent de l'anterior
+//            }
+            //TODO: WORKS
+            if(temp.prev == null && temp.next == null){
+                entries[hash] = null;             //esborrar element únic (no col·lissió)
             }
+            //TODO: WORKS
+            else if (temp.prev == null && temp.next != null) {
+                temp.next.prev = null;
+                HashEntry temp2 = temp.next;
+                entries[hash]=temp2;
+
+            }else if (temp.prev != null && temp.next != null){
+                temp.prev.next = temp.next;
+                temp.next.prev = temp.prev;
+
+                //recorremos hasta el inicio nuestro temporal para no perder nodos
+                while (temp.prev != null)
+                    temp = temp.prev;
+
+                entries[hash] = temp;
+            }else if (temp.prev != null && temp.next == null){
+                temp.prev.next = null;
+
+                //recorremos hasta el inicio nuestro temporal para no perder nodos
+                while (temp.prev != null)
+                    temp = temp.prev;
+
+                entries[hash] = temp;
+            }
+
+
         }
 
         //TODO:RESTAR LISTA ITEMS
@@ -222,20 +263,12 @@ public class HashTable {
         HashTable hashTable = new HashTable();
         
         // Put some key values.
-//        for(int i=0; i<30; i++) {
-//            final String key = String.valueOf(i);
-//            hashTable.put(key, key);
-//        }
+        for(int i=0; i<40; i++) {
+            final String key = String.valueOf(i);
+            hashTable.put(key, key);
+        }
 
-
-        hashTable.put("hola0", "hello0");
-        hashTable.put("hola1", "hello1");
-        hashTable.put("hola2", "hello2");
-        hashTable.put("hola3", "hello3");
-
-        hashTable.put(hashTable.getCollisionsForKey("hola0"), "Collision");
-
-        hashTable.drop("hola0");
+        hashTable.drop("34");
 
         // Print the HashTable structure
         log("****   HashTable  ***");
