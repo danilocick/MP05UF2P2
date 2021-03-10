@@ -99,9 +99,8 @@ public class HashTable {
             //TODO: WORKS
             if(temp.prev == null && temp.next == null){
                 entries[hash] = null;             //esborrar element únic (no col·lissió)
-            }
-            //TODO: WORKS
-            else if (temp.prev == null && temp.next != null) {
+
+            }else if (temp.prev == null && temp.next != null) {
                 temp.next.prev = null;
                 HashEntry temp2 = temp.next;
                 entries[hash]=temp2;
@@ -109,25 +108,21 @@ public class HashTable {
             }else if (temp.prev != null && temp.next != null){
                 temp.prev.next = temp.next;
                 temp.next.prev = temp.prev;
-
                 //recorremos hasta el inicio nuestro temporal para no perder nodos
                 while (temp.prev != null)
                     temp = temp.prev;
 
                 entries[hash] = temp;
+
             }else if (temp.prev != null && temp.next == null){
                 temp.prev.next = null;
-
                 //recorremos hasta el inicio nuestro temporal para no perder nodos
                 while (temp.prev != null)
                     temp = temp.prev;
 
                 entries[hash] = temp;
             }
-
-
         }
-
         //TODO:RESTAR LISTA ITEMS
         ITEMS--;
     }
