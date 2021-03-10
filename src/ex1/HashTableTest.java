@@ -9,7 +9,7 @@ class HashTableTest {
     /*
     * Hi ha 6 errors:
     * 1- count (No ++ , No --) LO TENEMOS
-    * 2- drop colisions LO TENEMOS
+    * 2- drop colisions (3) LO TENEMOS
     * 3- drop inexistent (count) LO TENEMOS
     * 4-
     * 5- length on put negative LO TENEMOS
