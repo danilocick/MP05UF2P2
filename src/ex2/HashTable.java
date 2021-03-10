@@ -1,7 +1,9 @@
-package original;
+package ex2;
 
 // Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
 // Modified by Fernando Porrino Serrano for academic purposes.
+
+import ex1.ExceptionsCreated;
 
 import java.util.ArrayList;
 
@@ -28,19 +30,49 @@ public class HashTable {
      * @param value El propi element que es vol afegir.
      */
     public void put(String key, String value) {
+        boolean change = true;
+        //guardamos el hash
         int hash = getHash(key);
-        final HashEntry hashEntry = new HashEntry(key, value);
+        // creamos un nuevo hash en el q tudo es null
+        //TODO: hash negative
+        if (hash >=0){
 
-        if(entries[hash] == null) {
-            entries[hash] = hashEntry;
-        }
-        else {
-            HashEntry temp = entries[hash];
-            while(temp.next != null)
-                temp = temp.next;
+            final HashEntry newHashEntry = new HashEntry(key, value);
 
-            temp.next = hashEntry;
-            hashEntry.prev = temp;
+            //si este hash esta vacio, lo añadismo como primero
+            if(entries[hash] == null) {
+                entries[hash] = newHashEntry;
+            }
+            else {
+
+                //creamos un hashentry temporal
+                HashEntry temp = entries[hash];
+
+                while(temp.next != null){
+                    if (temp.key.equals(key)){
+                        ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
+                        System.out.println(exceptionsCreated);
+                        change = false;
+                    }
+                    temp = temp.next;
+                    if (temp.key.equals(key)){
+                        ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
+                        System.out.println(exceptionsCreated);
+                        change = false;
+                    }
+                }
+                if (change){
+                    temp.next = newHashEntry;
+                    newHashEntry.prev = temp;
+                }
+            }
+            if (change){
+                //TODO:SUMAR LISTA ITEMS
+                ITEMS++;
+            }
+        }else{
+            ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key retorna un valor negatiu, no pots afegir aquest valor: "+key);
+            System.out.println(exceptionsCreated);
         }
     }
 
@@ -54,11 +86,13 @@ public class HashTable {
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
 
-            while( !temp.key.equals(key))
+            while( !temp.key.equals(key)){
                 temp = temp.next;
+            }
 
             return temp.value;
         }
+
         return null;
     }
 
@@ -67,18 +101,60 @@ public class HashTable {
      * @param key La clau de l'element a trobar.
      */
     public void drop(String key) {
+        boolean keyexist = true;
+        //tenemos el hash
         int hash = getHash(key);
+        //si en ese hash hay algo
         if(entries[hash] != null) {
 
+            //creamos el temporal
             HashEntry temp = entries[hash];
-            while( !temp.key.equals(key))
-                temp = temp.next;
 
-            if(temp.prev == null) entries[hash] = null;             //esborrar element únic (no col·lissió)
-            else{
-                if(temp.next != null) temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
-                temp.prev.next = temp.next;                         //esborrem temp, per tant actualitzem el següent de l'anterior
+            while (!temp.key.equals(key)){
+                if (temp.next == null){
+                    keyexist=false;
+                    break;
+                }else temp = temp.next;
             }
+            if (keyexist) {
+                //TODO: WORKS
+                if(temp.prev == null && temp.next == null){
+                    entries[hash] = null;             //esborrar element únic (no col·lissió)
+
+                }else if (temp.prev == null && temp.next != null) { //esborrar i modificar prev i next si es el primer element
+                    temp.next.prev = null;
+                    HashEntry temp2 = temp.next;
+                    entries[hash]=temp2;
+
+                }else if (temp.prev != null && temp.next != null){ //esborrar i modificar prev i next si esta entre mig
+                    temp.prev.next = temp.next;
+                    temp.next.prev = temp.prev;
+                    //recorremos hasta el inicio nuestro temporal para no perder nodos
+                    while (temp.prev != null)
+                        temp = temp.prev;
+
+                    entries[hash] = temp;
+
+                }else if (temp.prev != null && temp.next == null){ //esborrar i modificar prev i next si es l'ultim element
+                    temp.prev.next = null;
+                    //recorremos hasta el inicio nuestro temporal para no perder nodos
+                    while (temp.prev != null)
+                        temp = temp.prev;
+
+                    entries[hash] = temp;
+                }
+                //TODO:RESTAR LISTA ITEMS
+                ITEMS--;
+            }else{
+                ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key inexistent: "+key);
+                System.out.println(exceptionsCreated);
+            }
+//            if(temp.prev == null ){
+//                 if(temp.next != null) {
+//                    temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
+//                    temp.prev.next = temp.next;   //esborrem temp, per tant actualitzem el següent de l'anterior
+//            }
+
         }
     }
 
@@ -213,10 +289,12 @@ public class HashTable {
         HashTable hashTable = new HashTable();
         
         // Put some key values.
-        for(int i=0; i<30; i++) {
+        for(int i=0; i<40; i++) {
             final String key = String.valueOf(i);
             hashTable.put(key, key);
         }
+
+        hashTable.drop("34");
 
         // Print the HashTable structure
         log("****   HashTable  ***");
