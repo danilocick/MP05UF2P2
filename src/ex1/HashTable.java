@@ -47,13 +47,13 @@ public class HashTable {
 
             while(temp.next != null){
                 if (temp.key.equals(key)){
-                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla");
+                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
                     System.out.println(exceptionsCreated);
                     change = false;
                 }
                 temp = temp.next;
                 if (temp.key.equals(key)){
-                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla");
+                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
                     System.out.println(exceptionsCreated);
                     change = false;
                 }
@@ -94,6 +94,7 @@ public class HashTable {
      * @param key La clau de l'element a trobar.
      */
     public void drop(String key) {
+        boolean keyexist = true;
         //tenemos el hash
         int hash = getHash(key);
         //si en ese hash hay algo
@@ -102,42 +103,51 @@ public class HashTable {
             //creamos el temporal
             HashEntry temp = entries[hash];
 
-            while (!temp.key.equals(key))
-                temp = temp.next;
+            while (!temp.key.equals(key)){
+                if (temp.next == null){
+                    keyexist=false;
+                    break;
+                }else temp = temp.next;
+            }
+            if (keyexist) {
+                //TODO: WORKS
+                if(temp.prev == null && temp.next == null){
+                    entries[hash] = null;             //esborrar element únic (no col·lissió)
 
+                }else if (temp.prev == null && temp.next != null) { //esborrar i modificar prev i next si es el primer element
+                    temp.next.prev = null;
+                    HashEntry temp2 = temp.next;
+                    entries[hash]=temp2;
+
+                }else if (temp.prev != null && temp.next != null){ //esborrar i modificar prev i next si esta entre mig
+                    temp.prev.next = temp.next;
+                    temp.next.prev = temp.prev;
+                    //recorremos hasta el inicio nuestro temporal para no perder nodos
+                    while (temp.prev != null)
+                        temp = temp.prev;
+
+                    entries[hash] = temp;
+
+                }else if (temp.prev != null && temp.next == null){ //esborrar i modificar prev i next si es l'ultim element
+                    temp.prev.next = null;
+                    //recorremos hasta el inicio nuestro temporal para no perder nodos
+                    while (temp.prev != null)
+                        temp = temp.prev;
+
+                    entries[hash] = temp;
+                }
+                //TODO:RESTAR LISTA ITEMS
+                ITEMS--;
+            }else{
+                ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key inexistent: "+key);
+                System.out.println(exceptionsCreated);
+            }
 //            if(temp.prev == null ){
 //                 if(temp.next != null) {
 //                    temp.next.prev = temp.prev;   //esborrem temp, per tant actualitzem l'anterior al següent
 //                    temp.prev.next = temp.next;   //esborrem temp, per tant actualitzem el següent de l'anterior
 //            }
-            //TODO: WORKS
-            if(temp.prev == null && temp.next == null){
-                entries[hash] = null;             //esborrar element únic (no col·lissió)
 
-            }else if (temp.prev == null && temp.next != null) {
-                temp.next.prev = null;
-                HashEntry temp2 = temp.next;
-                entries[hash]=temp2;
-
-            }else if (temp.prev != null && temp.next != null){
-                temp.prev.next = temp.next;
-                temp.next.prev = temp.prev;
-                //recorremos hasta el inicio nuestro temporal para no perder nodos
-                while (temp.prev != null)
-                    temp = temp.prev;
-
-                entries[hash] = temp;
-
-            }else if (temp.prev != null && temp.next == null){
-                temp.prev.next = null;
-                //recorremos hasta el inicio nuestro temporal para no perder nodos
-                while (temp.prev != null)
-                    temp = temp.prev;
-
-                entries[hash] = temp;
-            }
-            //TODO:RESTAR LISTA ITEMS
-            ITEMS--;
         }
     }
 

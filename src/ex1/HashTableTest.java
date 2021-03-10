@@ -10,7 +10,7 @@ class HashTableTest {
     * Hi ha 6 errors:
     * 1- count (No ++ , No --) LO TENEMOS
     * 2- drop colisions LO TENEMOS
-    * 3-
+    * 3- drop inexistent (count) LO TENEMOS
     * 4-
     * 5- length on put
     * 6- duplicates LO TENEMOS
@@ -26,9 +26,8 @@ class HashTableTest {
         //Fiquem diferents items
         ht.put("hola0", "hello0");
         ht.put("hola1", "hello1");
-        ht.put("hola2", "hello2");
+        ht.put("hola2", "hello21324");
         ht.put("hola3", "hello3");
-
 
         Assertions.assertEquals(4, ht.count());
         Assertions.assertEquals(16, ht.size());
@@ -41,17 +40,22 @@ class HashTableTest {
         Assertions.assertEquals(5, ht.count());
         Assertions.assertEquals(16, ht.size());
 
-        //Eliminar 2 items para comprobar q se restan i el size siempre es 16
+        //Eliminar item para comprobar q se restan i el size siempre es 16
         ht.drop("hola2");
         Assertions.assertEquals(4, ht.count());
         Assertions.assertEquals(16, ht.size());
+
+        Assertions.assertEquals("\n" +
+                " bucket[4] = [hola0, hello0] -> [4, Collision]\n" +
+                " bucket[5] = [hola1, hello1]\n" +
+                " bucket[7] = [hola3, hello3]", ht.toString());
+
     }
 
     @org.junit.jupiter.api.Test
     void put_and_drop() {
         //TODO:albondigaa no funciona y saber porque
         //        hT.put("albondigaa", "almondiga3");
-
 
         HashTable ht = new HashTable();
 
@@ -123,7 +127,26 @@ class HashTableTest {
         Assertions.assertEquals(16, ht.size());
         Assertions.assertEquals(36, ht.count());
 
+        //drop not exist
+        ht.drop("32");
+        ht.drop("32");
+        ht.drop("2");
 
+        Assertions.assertEquals("\n bucket[0] = [0, 0] -> [11, 11] -> [22, 22] -> [33, 33]\n" +
+                " bucket[1] = [1, 1] -> [12, 12] -> [23, 23]\n" +
+                " bucket[2] = [13, 13] -> [24, 24] -> [35, 35]\n" +
+                " bucket[3] = [3, 3] -> [25, 25] -> [36, 36]\n" +
+                " bucket[4] = [4, 4] -> [15, 15] -> [26, 26] -> [37, 37]\n" +
+                " bucket[5] = [5, 5] -> [16, 16] -> [27, 27] -> [38, 38]\n" +
+                " bucket[6] = [6, 6] -> [17, 17] -> [28, 28] -> [39, 39]\n" +
+                " bucket[7] = [7, 7] -> [18, 18] -> [29, 29]\n" +
+                " bucket[8] = [8, 8] -> [19, 19]\n" +
+                " bucket[13] = [30, 30]\n" +
+                " bucket[14] = [20, 20] -> [31, 31]\n" +
+                " bucket[15] = [10, 10] -> [21, 21]", ht.toString());
+
+        Assertions.assertEquals(16, ht.size());
+        Assertions.assertEquals(35, ht.count());
 
 
     }
