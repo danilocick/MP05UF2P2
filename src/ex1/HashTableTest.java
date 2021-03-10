@@ -54,11 +54,12 @@ class HashTableTest {
 
     @org.junit.jupiter.api.Test
     void put_and_drop() {
-        //TODO:albondigaa no funciona y saber porque
 
         HashTable ht = new HashTable();
 
+        //TODO:albondigaa com a key dona un valor negatiu
         ht.put("albondigaa", "almondiga3");
+
         // añadiremos todos los valores al hashtable
         for(int i=0; i<40; i++) {
             final String key = String.valueOf(i);

@@ -35,7 +35,6 @@ public class HashTable {
         int hash = getHash(key);
         // creamos un nuevo hash en el q tudo es null
         //TODO: hash negative
-
         if (hash >=0){
 
             final HashEntry newHashEntry = new HashEntry(key, value);
