@@ -10,10 +10,10 @@ class HashTableTest {
     * Hi ha 6 errors:
     * 1- count (No ++ , No --) LO TENEMOS
     * 2- drop colisions LO TENEMOS
-    * 3- drop colisions LO TENEMOS
-    * 4- drop colisions LO TENEMOS
+    * 3-
+    * 4-
     * 5- length on put
-    * 6- duplicates
+    * 6- duplicates LO TENEMOS
     */
 
     @org.junit.jupiter.api.Test
@@ -100,6 +100,31 @@ class HashTableTest {
 
         Assertions.assertEquals(16, ht.size());
         Assertions.assertEquals(36, ht.count());
+
+
+        //DUPLICATES
+        ht.put("6", "overwrite"); //inici
+        ht.put("25", "overwrite"); //mig
+        ht.put("38", "overwrite"); //final
+
+        Assertions.assertEquals("\n bucket[0] = [0, 0] -> [11, 11] -> [22, 22] -> [33, 33]\n" +
+                " bucket[1] = [1, 1] -> [12, 12] -> [23, 23]\n" +
+                " bucket[2] = [13, 13] -> [24, 24] -> [35, 35]\n" +
+                " bucket[3] = [3, 3] -> [25, 25] -> [36, 36]\n" +
+                " bucket[4] = [4, 4] -> [15, 15] -> [26, 26] -> [37, 37]\n" +
+                " bucket[5] = [5, 5] -> [16, 16] -> [27, 27] -> [38, 38]\n" +
+                " bucket[6] = [6, 6] -> [17, 17] -> [28, 28] -> [39, 39]\n" +
+                " bucket[7] = [7, 7] -> [18, 18] -> [29, 29]\n" +
+                " bucket[8] = [8, 8] -> [19, 19]\n" +
+                " bucket[13] = [30, 30]\n" +
+                " bucket[14] = [20, 20] -> [31, 31]\n" +
+                " bucket[15] = [10, 10] -> [21, 21] -> [32, 32]", ht.toString());
+
+        Assertions.assertEquals(16, ht.size());
+        Assertions.assertEquals(36, ht.count());
+
+
+
 
     }
 }

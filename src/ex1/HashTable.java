@@ -30,29 +30,43 @@ public class HashTable {
      * @param value El propi element que es vol afegir.
      */
     public void put(String key, String value) {
+        boolean change = true;
         //guardamos el hash
         int hash = getHash(key);
         // creamos un nuevo hash en el q tudo es null
-        final HashEntry hashEntry = new HashEntry(key, value);
+        final HashEntry newHashEntry = new HashEntry(key, value);
 
-        //si este hash esta vacio, lo iniciamos
+        //si este hash esta vacio, lo añadismo como primero
         if(entries[hash] == null) {
-            entries[hash] = hashEntry;
+            entries[hash] = newHashEntry;
         }
         else {
+
             //creamos un hashentry temporal
             HashEntry temp = entries[hash];
 
             while(temp.next != null){
+                if (temp.key.equals(key)){
+                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla");
+                    System.out.println(exceptionsCreated);
+                    change = false;
+                }
                 temp = temp.next;
+                if (temp.key.equals(key)){
+                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla");
+                    System.out.println(exceptionsCreated);
+                    change = false;
+                }
             }
-
-            temp.next = hashEntry;
-            hashEntry.prev = temp;
+            if (change){
+                temp.next = newHashEntry;
+                newHashEntry.prev = temp;
+            }
         }
-
-        //TODO:SUMAR LISTA ITEMS
-        ITEMS++;
+        if (change){
+            //TODO:SUMAR LISTA ITEMS
+            ITEMS++;
+        }
     }
 
     /**
@@ -122,9 +136,9 @@ public class HashTable {
 
                 entries[hash] = temp;
             }
+            //TODO:RESTAR LISTA ITEMS
+            ITEMS--;
         }
-        //TODO:RESTAR LISTA ITEMS
-        ITEMS--;
     }
 
     private int getHash(String key) {
