@@ -12,7 +12,7 @@ class HashTableTest {
     * 2- drop colisions LO TENEMOS
     * 3- drop inexistent (count) LO TENEMOS
     * 4-
-    * 5- length on put
+    * 5- length on put negative LO TENEMOS
     * 6- duplicates LO TENEMOS
     */
 
@@ -55,10 +55,10 @@ class HashTableTest {
     @org.junit.jupiter.api.Test
     void put_and_drop() {
         //TODO:albondigaa no funciona y saber porque
-        //        hT.put("albondigaa", "almondiga3");
 
         HashTable ht = new HashTable();
 
+        ht.put("albondigaa", "almondiga3");
         // añadiremos todos los valores al hashtable
         for(int i=0; i<40; i++) {
             final String key = String.valueOf(i);

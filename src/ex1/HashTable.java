@@ -34,38 +34,46 @@ public class HashTable {
         //guardamos el hash
         int hash = getHash(key);
         // creamos un nuevo hash en el q tudo es null
-        final HashEntry newHashEntry = new HashEntry(key, value);
+        //TODO: hash negative
 
-        //si este hash esta vacio, lo añadismo como primero
-        if(entries[hash] == null) {
-            entries[hash] = newHashEntry;
-        }
-        else {
+        if (hash >=0){
 
-            //creamos un hashentry temporal
-            HashEntry temp = entries[hash];
+            final HashEntry newHashEntry = new HashEntry(key, value);
 
-            while(temp.next != null){
-                if (temp.key.equals(key)){
-                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
-                    System.out.println(exceptionsCreated);
-                    change = false;
+            //si este hash esta vacio, lo añadismo como primero
+            if(entries[hash] == null) {
+                entries[hash] = newHashEntry;
+            }
+            else {
+
+                //creamos un hashentry temporal
+                HashEntry temp = entries[hash];
+
+                while(temp.next != null){
+                    if (temp.key.equals(key)){
+                        ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
+                        System.out.println(exceptionsCreated);
+                        change = false;
+                    }
+                    temp = temp.next;
+                    if (temp.key.equals(key)){
+                        ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
+                        System.out.println(exceptionsCreated);
+                        change = false;
+                    }
                 }
-                temp = temp.next;
-                if (temp.key.equals(key)){
-                    ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key duplicada, no pots modificarla: "+key);
-                    System.out.println(exceptionsCreated);
-                    change = false;
+                if (change){
+                    temp.next = newHashEntry;
+                    newHashEntry.prev = temp;
                 }
             }
             if (change){
-                temp.next = newHashEntry;
-                newHashEntry.prev = temp;
+                //TODO:SUMAR LISTA ITEMS
+                ITEMS++;
             }
-        }
-        if (change){
-            //TODO:SUMAR LISTA ITEMS
-            ITEMS++;
+        }else{
+            ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key retorna un valor negatiu, no pots afegir aquest valor: "+key);
+            System.out.println(exceptionsCreated);
         }
     }
 
@@ -218,7 +226,8 @@ public class HashTable {
      * @param quantity La quantitat de col·lisions a calcular.
      * @return Un llistat de claus que, de fer-se servir, provoquen col·lisió.
      */
-    public ArrayList<String> getCollisionsForKey(String key, int quantity){
+    public ArrayList<String> getCollisionsForKey(String key, int quantity)
+    {
         /*
           Main idea:
           alphabet = {0, 1, 2}
