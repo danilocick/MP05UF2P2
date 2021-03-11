@@ -82,18 +82,27 @@ public class HashTable {
      * @return El propi element que es busca (null si no s'ha trobat).
      */
     public String get(String key) {
+        boolean keyexist = true;
+
+
         int hash = getHash(key);
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
 
-            while( !temp.key.equals(key)){
+            while (!temp.key.equals(key)) {
+                if (temp.next == null) {
+                    keyexist = false;
+                    break;
+                }
                 temp = temp.next;
             }
-
-            return temp.value;
+            if (keyexist) {
+                return temp.value;
+            }
         }
-
-        return null;
+        ExceptionsCreated exceptionsCreated = new ExceptionsCreated("Key inexistent: "+key);
+        System.out.println(exceptionsCreated);
+        return String.valueOf(exceptionsCreated);
     }
 
     /**

@@ -11,7 +11,7 @@ class HashTableTest {
     * 1- count (No ++ , No --) LO TENEMOS
     * 2- drop colisions (3) LO TENEMOS
     * 3- drop inexistent (count) LO TENEMOS
-    * 4-
+    * 4-  get inexistent
     * 5- length on put negative LO TENEMOS
     * 6- duplicates LO TENEMOS
     */
@@ -61,7 +61,7 @@ class HashTableTest {
         ht.put("albondigaa", "almondiga3");
 
         // añadiremos todos los valores al hashtable
-        for(int i=0; i<40; i++) {
+        for (int i = 0; i < 40; i++) {
             final String key = String.valueOf(i);
             ht.put(key, key);
         }
@@ -149,6 +149,27 @@ class HashTableTest {
         Assertions.assertEquals(16, ht.size());
         Assertions.assertEquals(35, ht.count());
 
+    }
+    @org.junit.jupiter.api.Test
+    void get() {
+        HashTable ht = new HashTable();
 
+        // añadiremos todos los valores al hashtable
+        for (int i = 0; i < 40; i++) {
+            final String key = String.valueOf(i);
+            ht.put(key, key);
+        }
+
+        String principi = ht.get("1");//agafar el primer
+        String mig = ht.get("15");//agafar el mig
+        String last = ht.get("26");//afagar l'ultim
+
+        Assertions.assertEquals("1", principi);
+        Assertions.assertEquals("15", mig);
+        Assertions.assertEquals("26", last);
+
+
+        String errorcito = ht.get("42");//get inexistent
+        Assertions.assertEquals("ex1.ExceptionsCreated: Key inexistent: 42", errorcito);
     }
 }
