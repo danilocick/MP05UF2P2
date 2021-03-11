@@ -1,4 +1,4 @@
-package ex2;
+package ex3;
 
 // Original source code: https://gist.github.com/amadamala/3cdd53cb5a6b1c1df540981ab0245479
 // Modified by Fernando Porrino Serrano for academic purposes.
@@ -27,7 +27,7 @@ public class HashTable {
      * @param key La clau de l'element a afegir.
      * @param value El propi element que es vol afegir.
      */
-    public void put(String key, String value) {
+    public void put(Object key, Object value) {
         boolean change = true;
         //guardamos el hash
         int hash = getHash(key);
@@ -76,7 +76,7 @@ public class HashTable {
      * @param key La clau de l'element a trobar.
      * @return El propi element que es busca (null si no s'ha trobat).
      */
-    public String get(String key) {
+    public Object get(Object key) {
         boolean keyexist = true;
 
 
@@ -99,7 +99,7 @@ public class HashTable {
         return String.valueOf(exceptionsCreated);
     }
 
-    private ExceptionsCreated throwExceptions(String key, String s) {
+    private ExceptionsCreated throwExceptions(Object key, String s) {
         ExceptionsCreated exceptionsCreated = new ExceptionsCreated(s + key);
         System.out.println(exceptionsCreated);
         return exceptionsCreated;
@@ -109,7 +109,7 @@ public class HashTable {
      * Permet esborrar un element dins de la taula.
      * @param key La clau de l'element a trobar.
      */
-    public void drop(String key) {
+    public void drop(Object key) {
         boolean keyexist = true;
         //tenemos el hash
         int hash = getHash(key);
@@ -166,21 +166,21 @@ public class HashTable {
         }
     }
 
-    private int getHash(String key) {
+    private int getHash(Object key) {
         // piggy backing on java string
         // hashcode implementation.
         return key.hashCode() % SIZE;
     }
 
     private class HashEntry {
-        String key;
-        String value;
+        Object key;
+        Object value;
 
         // Linked list of same hash entries.
         HashEntry next;
         HashEntry prev;
 
-        public HashEntry(String key, String value) {
+        public HashEntry(Object key, Object value) {
             this.key = key;
             this.value = value;
             this.next = null;

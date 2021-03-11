@@ -1,6 +1,5 @@
-package ex2;
+package ex3;
 
-import ex2.HashTable;
 import org.junit.jupiter.api.Assertions;
 
 class HashTableTest {
@@ -158,16 +157,16 @@ class HashTableTest {
             ht.put(key, key);
         }
 
-        String principi = ht.get("1"); //agafar el primer
-        String mig = ht.get("15"); //agafar el mig
-        String last = ht.get("26"); //afagar l'ultim
+        Object principi = ht.get("1"); //agafar el primer
+        Object mig = ht.get("15"); //agafar el mig
+        Object last = ht.get("26"); //afagar l'ultim
 
         Assertions.assertEquals("1", principi);
         Assertions.assertEquals("15", mig);
         Assertions.assertEquals("26", last);
 
 
-        String errorcito = ht.get("42"); //get inexistent
-        Assertions.assertEquals("ex2.ExceptionsCreated: Key inexistent: 42", errorcito);
+        Object errorcito = ht.get("42"); //get inexistent
+        Assertions.assertEquals("ex3.ExceptionsCreated: Key inexistent: 42", errorcito);
     }
 }

@@ -84,7 +84,6 @@ public class HashTable {
     public String get(String key) {
         boolean keyexist = true;
 
-
         int hash = getHash(key);
         if(entries[hash] != null) {
             HashEntry temp = entries[hash];
@@ -234,8 +233,7 @@ public class HashTable {
      * @param quantity La quantitat de col·lisions a calcular.
      * @return Un llistat de claus que, de fer-se servir, provoquen col·lisió.
      */
-    public ArrayList<String> getCollisionsForKey(String key, int quantity)
-    {
+    public ArrayList<String> getCollisionsForKey(String key, int quantity){
         /*
           Main idea:
           alphabet = {0, 1, 2}
